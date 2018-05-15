@@ -4,7 +4,7 @@
 document.onkeyup=function(e){console.log(e.keyCode);}
 
 /* mino별 기본 좌표 */
-var minoList = [[0,1,2,2,1,1,1,0],[0,1,2,2,0,0,0,1],[0,0,1,1,0,1,0,1],[0,0,0,1,0,1,2,1],[0,1,1,2,0,0,1,1],[0,1,1,2,1,1,0,0]]
+var minoList = [[0,1,2,2,1,1,1,0],[0,1,2,2,0,0,0,1],[0,0,1,1,0,1,0,1],[0,0,0,1,0,1,2,1],[0,1,1,2,0,0,1,1],[0,1,1,2,1,1,0,0],[0,1,2,3,1,1,1,1]]
 
 /* 현재레벨 카운팅, 속도 지정 */
 let level = 1;
@@ -142,6 +142,7 @@ var blocks = {
             case 4  : this.init(minoList[3],1); this.blockName = "T"; break;
             case 5  : this.init(minoList[4]);   this.blockName = "S"; break;
             case 6  : this.init(minoList[5]);   this.blockName = "Z"; break;
+            case 7  : this.init(minoList[6]);   this.blockName = "l"; break;
             default : this.init(minoList[5]);   this.blockName = "Z"; break;
         }
     },
