@@ -4,11 +4,22 @@
 document.onkeyup=function(e){console.log(e.keyCode);}
 
 /* mino별 기본 좌표 */
-var minoList = [[0,1,2,2,1,1,1,0],[0,1,2,2,0,0,0,1],[0,0,1,1,0,1,0,1],[0,0,0,1,0,1,2,1],[0,1,1,2,0,0,1,1],[0,1,1,2,1,1,0,0],[0,1,2,3,1,1,1,1]]
+var minoList = [
+    [0,1,2,2,1,1,1,0],
+    [0,1,2,2,0,0,0,1],
+    [0,0,1,1,0,1,0,1],
+    [0,0,0,1,0,1,2,1],
+    [0,1,1,2,0,0,1,1],
+    [0,1,1,2,1,1,0,0],
+    [0,1,2,3,1,1,1,1]
+];
+
+let wrapElement = document.getElementById("wrap");
+const cloneNodes = wrapElement.innerHTML;
 
 /* 현재레벨 카운팅, 속도 지정 */
 let level = 1;
-let defaultSpeed = 100;
+let defaultSpeed = 60;
 let speed = defaultSpeed;
 let max = 18;
 let cood = 5;
@@ -25,7 +36,7 @@ var current;
 var blocks = {
     init : function(arr,isOmino){
         this.arr = arr;
-        max = isOmino ? (max+1) : 18;
+        max = isOmino ? (isOmino===2?17:(max+1)) : 18;
         var that = this;
         current = setInterval( function(){
             that.default();
@@ -36,7 +47,7 @@ var blocks = {
         var firstLine = document.getElementById("box0");
         for( var j =0; j<12; j++){
             if(firstLine.getElementsByClassName("dot")[j].classList.contains("off")){
-                alert("GAME OVER");
+                styleGameOver();
                 this.putOut(true);
                 return false;
             }
@@ -84,9 +95,8 @@ var blocks = {
         before2.classList.add("off");
         before3.classList.add("off");
         before4.classList.add("off");
-        var wrapElement = document.getElementById("wrap");
-        
 
+        
         var fullBox = 0, arr=[];
         for( var k = i; k>=0; k--){
             for( var j =0; j<12; j++){
@@ -113,6 +123,7 @@ var blocks = {
                 wrapElement.insertBefore(newLine,wrapElement.childNodes[0]);
             }
         }
+        removeRow(arr);
 
 
         //box index 새로 세팅
@@ -130,27 +141,48 @@ var blocks = {
         //넘긴 인자가 true 이면 게임 종료, 없거나 false이면 계속 진행(새 블럭 생성)
         if(!certain){
             this.showNewBlock();
+            styleGameStart();
         }
     },
     showNewBlock : function(){
-        var randomBlock = Math.floor(Math.random()*10);
+        styleGameStart();
+        var randomBlock = Math.floor(Math.random()*10);console.log(randomBlock);
         
         switch(randomBlock){
-            case 1  : this.init(minoList[0]);   this.blockName = "J"; break;
+            case 1  : console.log(this);this.init(minoList[0]);   this.blockName = "J"; break;
             case 2  : this.init(minoList[1]);   this.blockName = "L"; break;
             case 3  : this.init(minoList[2],1); this.blockName = "O"; break;
             case 4  : this.init(minoList[3],1); this.blockName = "T"; break;
             case 5  : this.init(minoList[4]);   this.blockName = "S"; break;
             case 6  : this.init(minoList[5]);   this.blockName = "Z"; break;
-            case 7  : this.init(minoList[6]);   this.blockName = "l"; break;
+            case 7  : this.init(minoList[6],2); this.blockName = "l"; break;
             default : this.init(minoList[5]);   this.blockName = "Z"; break;
         }
     },
     
 }
 
+/* 게임시작 */
+function styleGameStart(){
+    document.getElementById("dim").classList.remove("on");
+    document.getElementById("theEnd").style.display = "none";
+}
+/* 게임종료 */
+function styleGameOver(){
+    document.getElementById("dim").classList.add("on");
+    document.getElementById("theEnd").style.display = "block";
+}
+
 /* 최초시작 */
-blocks.init(minoList[3],1);
+blocks.showNewBlock();
+
+/* Replay button 클릭시 */
+const btnReplay = document.getElementById("btnReplay");
+btnReplay.onclick = rePlay;
+function rePlay(){
+    blocks.showNewBlock();
+    wrapElement.innerHTML = cloneNodes;
+}
 
 
 /* 블록이 움직일 수 있는 한계 지정 */
@@ -163,8 +195,9 @@ blocks.init(minoList[3],1);
 // 키 작업시 항상 전역에 있는 객체를 움직이고 변형하고 빨리 내림
 
 
-/* 위쪽 화살표 누름 - 블록 모양 바꾸기 */
+/* 위쪽 화살표 or 스페이스바 누름 - 블록 모양 바꾸기 */
 function transferBlock(){
+    
 }
 
 /* 아래쪽 화살표 누름 - 블록 빨리 내리기 */

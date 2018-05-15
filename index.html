@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="tetris.css">
 </head>
 <body>
+    <h1 class="title">TETRIS</h1>
     <div id="wrap" class="wrap">
         <div id="box0" class="box"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
         <div id="box1" class="box"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
@@ -30,7 +31,11 @@
         <div id="box19" class="box"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     </div>
 
-    
+    <div id="dim" class="dim"></div>
+    <div id="theEnd" class="over">GAME OVER
+        <button type="button" id="btnRanking" class="btnType1">Ranking</button>
+        <button type="button" id="btnReplay" class="btnType1">Replay</button>
+    </div>
     <script src="tetris.js"></script>
 </body>
 </html>
