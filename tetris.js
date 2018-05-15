@@ -3,10 +3,18 @@
 /* document key Code check */
 document.onkeyup=function(e){console.log(e.keyCode);}
 
+/* mino별 기본 좌표 */
+var Jmino = [0,1,2,2,1,1,1,0];
+var Lmino = [0,1,2,2,0,0,0,1];
+var Omino = [0,0,1,1,0,1,0,1];
+var Tmino = [0,1,2,1,0,0,0,1];
+var Smino = [0,1,1,2,0,0,1,1];
+var Zmino = [0,1,1,2,1,1,0,0];
+
 /* 현재레벨 카운팅, 속도 지정 */
 let level = 1;
 let speed = 300;
-let max = 19;
+let max = 18;
 let cood = 5;
 
 var newBlock; //계속적으로 새로 업데이트 될 신규 블럭
@@ -15,12 +23,13 @@ var newBlock; //계속적으로 새로 업데이트 될 신규 블럭
 var block4;
 var i = 0;
 var before1,before2,before3,before4;
-/* 블록이 떨어지는 로직 : 매순간 4개의 블록이 동시에 변화되어야 함  */
 
+/* 블록이 떨어지는 로직 : 매순간 4개의 블록이 동시에 변화되어야 함  */
 var current;
 var blocks = {
-    init : function(a,b,c,d,e,f,g,h){
-        this.arr = [a,b,c,d,e,f,g,h];
+    init : function(arr,isOmino){
+        this.arr = arr;
+        this.isOmino = isOmino;
         var that = this;
         current = setInterval( function(){
             that.default();
@@ -28,8 +37,8 @@ var blocks = {
     },
     default : function(){
         
-        if(  ){
-           max = max-1;
+        if( this.isOmino ){
+           max = max+1;
         }
         if(before1){ before1.classList.remove("on") }
         if(before2){ before2.classList.remove("on") }
@@ -47,19 +56,19 @@ var blocks = {
         before4.classList.add("on");
         
         i++;
-        if( i ===  ){
+        if( i === max ){
             clearInterval(current);
         }
         
     }
 }
 
-// var BlockJ = blocks.init(0,1,2,2,1,1,1,0);
-// var BlockL = blocks.init(0,1,2,2,0,0,0,1);
- var BlockO = blocks.init(0,0,1,1,0,1,0,1);
-// var BlockT = blocks.init(0,1,2,1,0,0,0,1);
-// var BlockT = blocks.init(0,1,1,2,0,0,1,1);
-//  var BlockZ = blocks.init(0,1,1,2,1,1,0,0);
+// var BlockJ = blocks.init(Jmino);
+// var BlockL = blocks.init(Lmino);
+// var BlockO = blocks.init(Omino);
+// var BlockT = blocks.init(Tmino);
+// var BlockS = blocks.init(Smino);
+ var BlockZ = blocks.init(Zmino);
 
 
 /* 블록이 움직일 수 있는 한계 지정 */

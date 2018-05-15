@@ -1,8 +1,9 @@
 @charset "utf-8";
 
+body {text-align:center}
 .wrap {display:inline-block; border:2px solid #000}
 
 .box:after {content:""; display:block; clear:both}
 .dot {float:left; width:20px; height:20px; margin:2px; background:rgba(0,0,0,.2)}
-.dot.on {background:pink}
+.dot.on {background:purple}
 
