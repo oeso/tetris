@@ -1,9 +1,10 @@
 @charset "utf-8";
 
-body {text-align:center}
-.wrap {display:inline-block; border:2px solid #000}
-
+body {min-width:320px; text-align:center; background:#3a3a3a}
+.wrap {display:inline-block; border:3px solid #fff}
+.box.on {background:red}
 .box:after {content:""; display:block; clear:both}
-.dot {float:left; width:20px; height:20px; margin:2px; background:rgba(0,0,0,.2)}
-.dot.on {background:purple}
+.dot {float:left; width:20px; height:20px; margin:2px; background:rgba(255,255,255,.9)}
+.dot.on {background:#358bf2}
+.dot.off {background:#201940}
 
