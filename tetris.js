@@ -4,27 +4,54 @@
 document.onkeyup=function(e){console.log(e.keyCode);}
 
 /* mino별 기본 좌표 */
+// var minoList = [
+//     [0,1,2,2,1,1,1,0], //Jmino
+//     [0,1,2,2,0,0,0,1], //Lmino
+//     [0,0,1,1,0,1,0,1],1, //Omino
+//     [0,0,0,1,0,1,2,1],1, //Tmino
+//     [0,1,1,2,0,0,1,1], //Smino
+//     [0,1,1,2,1,1,0,0], //Zmino
+//     [0,1,2,3,1,1,1,1]  //lmino
+// ];
+
+//회전1
+// var minoList = [
+//     [[0,1,1,1,0,0,1,2],0] //Jmino
+//     [[0,0,0,1,0,1,2,0],0] //Lmino
+//     [[0,0,1,1,0,1,0,1],0] //Omino 같음
+//     [[0,1,1,0,0,0,1,0],0] //Tmino
+//     [[0,0,1,2,1,1,0,0],1] //Smino
+//     [[0,0,1,1,0,1,1,2],1] //Zmino
+//     [[0,0,0,0,0,1,2,3],2]  //lmino
+// ];
+
+//회전2
 var minoList = [
-    [0,1,2,2,1,1,1,0],
-    [0,1,2,2,0,0,0,1],
-    [0,0,1,1,0,1,0,1],
-    [0,0,0,1,0,1,2,1],
-    [0,1,1,2,0,0,1,1],
-    [0,1,1,2,1,1,0,0],
-    [0,1,2,3,1,1,1,1]
+    [[0,1,1,1,0,0,1,2],0] //Jmino
+    [[0,0,0,1,0,1,2,0],0] //Lmino
+    [[0,0,1,1,0,1,0,1],0] //Omino 같음
+    [[0,1,1,0,0,0,1,0],0] //Tmino
+    [[0,0,1,2,1,1,0,0],1] //Smino
+    [[0,0,1,1,0,1,1,2],1] //Zmino
+    [[0,0,0,0,0,1,2,3],2]  //lmino
 ];
+
+var minoJ = [[0,1,2,2,1,1,1,0],[0,1,1,1,0,0,1,2],]
+
 
 let wrapElement = document.getElementById("wrap");
 const cloneNodes = wrapElement.innerHTML;
 
 /* 현재레벨 카운팅, 속도 지정 */
 let level = 1;
-let defaultSpeed = 60;
+let defaultSpeed = 120;
 let speed = defaultSpeed;
 let max = 18;
 let cood = 5;
 
 var newBlock; //계속적으로 새로 업데이트 될 신규 블럭
+
+//0,1,2,3
 
 /* 블록 종류 지정 */
 var block4;
@@ -36,7 +63,7 @@ var current;
 var blocks = {
     init : function(arr,isOmino){
         this.arr = arr;
-        max = isOmino ? (isOmino===2?17:(max+1)) : 18;
+        max = isOmino ? (isOmino===2?17:( isOmino === 1? 16 :(max+1))) : 18;
         var that = this;
         current = setInterval( function(){
             that.default();
@@ -125,7 +152,6 @@ var blocks = {
         }
         removeRow(arr);
 
-
         //box index 새로 세팅
         var boxs = wrapElement.getElementsByClassName("box");
         for(var l=0; l<boxs.length; l++){
@@ -146,13 +172,14 @@ var blocks = {
     },
     showNewBlock : function(){
         styleGameStart();
-        var randomBlock = Math.floor(Math.random()*10);console.log(randomBlock);
+        var randomBlock = Math.floor(Math.random()*10);
+        console.log(randomBlock);
         
         switch(randomBlock){
             case 1  : console.log(this);this.init(minoList[0]);   this.blockName = "J"; break;
             case 2  : this.init(minoList[1]);   this.blockName = "L"; break;
-            case 3  : this.init(minoList[2],1); this.blockName = "O"; break;
-            case 4  : this.init(minoList[3],1); this.blockName = "T"; break;
+            case 3  : this.init(minoList[2]); this.blockName = "O"; break;
+            case 4  : this.init(minoList[3]); this.blockName = "T"; break;
             case 5  : this.init(minoList[4]);   this.blockName = "S"; break;
             case 6  : this.init(minoList[5]);   this.blockName = "Z"; break;
             case 7  : this.init(minoList[6],2); this.blockName = "l"; break;
