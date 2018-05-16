@@ -26,17 +26,23 @@ document.onkeyup=function(e){console.log(e.keyCode);}
 // ];
 
 //회전2
-var minoList = [
-    [[0,1,1,1,0,0,1,2],0] //Jmino
-    [[0,0,0,1,0,1,2,0],0] //Lmino
-    [[0,0,1,1,0,1,0,1],0] //Omino 같음
-    [[0,1,1,0,0,0,1,0],0] //Tmino
-    [[0,0,1,2,1,1,0,0],1] //Smino
-    [[0,0,1,1,0,1,1,2],1] //Zmino
-    [[0,0,0,0,0,1,2,3],2]  //lmino
-];
+// var minoList = [
+//     [[0,1,1,1,0,0,1,2],0] //Jmino
+//     [[0,0,0,1,0,1,2,0],0] //Lmino
+//     [[0,0,1,1,0,1,0,1],0] //Omino 같음
+//     [[0,1,1,0,0,0,1,0],0] //Tmino
+//     [[0,0,1,2,1,1,0,0],1] //Smino
+//     [[0,0,1,1,0,1,1,2],1] //Zmino
+//     [[0,0,0,0,0,1,2,3],2]  //lmino
+// ];
 
-var minoJ = [[0,1,2,2,1,1,1,0],[0,1,1,1,0,0,1,2],]
+var minoJ  = [[0,1,2,2,1,1,1,0],[0,1,1,1,0,0,1,2],[0,1,2,2,0,0,0,1],[0,0,0,1,0,1,2,0]]
+var minoL  = [[0,1,2,2,0,0,0,1],[0,1,1,1,2,2,1,0],[0,1,2,2,1,1,1,0],[0,0,0,1,0,1,2,2]]
+var minoZ  = [[0,0,1,1,0,1,1,2],[0,1,1,2,1,1,0,0],[0,0,1,1,0,1,1,2],[0,1,1,2,1,1,0,0]]
+var minoS  = [[0,0,1,1,1,2,1,0],[0,1,1,2,0,0,1,1],[0,0,1,1,1,2,1,0],[0,1,1,2,0,0,1,1]]
+var mino_l = [[0,0,0,0,-1,0,1,2],[0,1,2,3,0,0,0,0],[0,0,0,0,-1,0,1,2],[0,1,2,3,0,0,0,0]]
+var minoO  = [[0,0,1,1,0,1,0,1],[0,0,1,1,0,1,0,1],[0,0,1,1,0,1,0,1],[0,0,1,1,0,1,0,1]]
+var minoT  = [[0,0,0,1,0,1,2,1],[0,1,1,2,0,0,1,0],[1,1,0,1,0,1,1,2],[0,1,2,1,2,2,2,1]]
 
 
 let wrapElement = document.getElementById("wrap");
@@ -44,7 +50,7 @@ const cloneNodes = wrapElement.innerHTML;
 
 /* 현재레벨 카운팅, 속도 지정 */
 let level = 1;
-let defaultSpeed = 120;
+let defaultSpeed = 130;
 let speed = defaultSpeed;
 let max = 18;
 let cood = 5;
@@ -62,14 +68,15 @@ var before1,before2,before3,before4;
 var current;
 var blocks = {
     init : function(arr,isOmino){
+        cood = 5;
         this.arr = arr;
-        max = isOmino ? (isOmino===2?17:( isOmino === 1? 16 :(max+1))) : 18;
+        //max = isOmino ? (isOmino===2?17:( isOmino === 1? 16 :(max+1))) : 18;
         var that = this;
         current = setInterval( function(){
-            that.default();
+            that.default(cood);
         }, speed)
     },
-    default : function(){        
+    default : function(cood){
         //첫째 줄 부터 OFF상태인 블럭이 하나라도 있으면 GAME OVER
         var firstLine = document.getElementById("box0");
         for( var j =0; j<12; j++){
@@ -84,8 +91,12 @@ var blocks = {
         if(before2){ before2.classList.remove("on") }
         if(before3){ before3.classList.remove("on") }
         if(before4){ before4.classList.remove("on") }
-        
 
+        if( i + this.arr[0]>=20 || i + this.arr[1]>=20 ||i + this.arr[2]>=20 ||i + this.arr[3]>=20 ){
+            this.putOut();
+            return false;
+        }
+    
         before1 = document.getElementById("box"+( i + this.arr[0] )).getElementsByClassName("dot")[ cood + this.arr[4] ];
         before2 = document.getElementById("box"+( i + this.arr[1] )).getElementsByClassName("dot")[ cood + this.arr[5] ];
         before3 = document.getElementById("box"+( i + this.arr[2] )).getElementsByClassName("dot")[ cood + this.arr[6] ];
@@ -97,19 +108,26 @@ var blocks = {
         before4.classList.add("on");
         
         i++;
-        if(i === max  ){ // 바닥에 닿을 시 off처리.
-            this.putOut();
-            return false;
-        }
-               
-        //떨어지다가 다음 모눈이 off상태이면 그자리에서 stop하고 off처리.
-        if( 
-            document.getElementById("box"+( i + this.arr[0] )).getElementsByClassName("dot")[ cood + this.arr[4]].classList.contains("off") || 
-            document.getElementById("box"+( i + this.arr[1] )).getElementsByClassName("dot")[ cood + this.arr[5]].classList.contains("off") || 
-            document.getElementById("box"+( i + this.arr[2] )).getElementsByClassName("dot")[ cood + this.arr[6]].classList.contains("off") || 
-            document.getElementById("box"+( i + this.arr[3] )).getElementsByClassName("dot")[ cood + this.arr[7]].classList.contains("off")){ 
-            this.putOut();
-            return false;
+        // if(i === max  ){ // 바닥에 닿을 시 off처리.
+        //     this.putOut();
+        //     return false;
+        // }
+        var m0 = document.getElementById("box"+( i + this.arr[0] ));
+        var m1 = document.getElementById("box"+( i + this.arr[1] ));
+        var m2 = document.getElementById("box"+( i + this.arr[2] ));
+        var m3 = document.getElementById("box"+( i + this.arr[3] ));
+        
+        if( m0 && m1 && m2 && m3 ){
+            //떨어지다가 다음 모눈이 off상태이면 그자리에서 stop하고 off처리.
+            if( 
+                m0.getElementsByClassName("dot")[ cood + this.arr[4]].classList.contains("off") || 
+                m1.getElementsByClassName("dot")[ cood + this.arr[5]].classList.contains("off") || 
+                m2.getElementsByClassName("dot")[ cood + this.arr[6]].classList.contains("off") || 
+                m3.getElementsByClassName("dot")[ cood + this.arr[7]].classList.contains("off")){ 
+
+                this.putOut();
+                return false;
+            }
         }
     },
     putOut : function(certain){
@@ -173,17 +191,16 @@ var blocks = {
     showNewBlock : function(){
         styleGameStart();
         var randomBlock = Math.floor(Math.random()*10);
-        console.log(randomBlock);
         
         switch(randomBlock){
-            case 1  : console.log(this);this.init(minoList[0]);   this.blockName = "J"; break;
-            case 2  : this.init(minoList[1]);   this.blockName = "L"; break;
-            case 3  : this.init(minoList[2]); this.blockName = "O"; break;
-            case 4  : this.init(minoList[3]); this.blockName = "T"; break;
-            case 5  : this.init(minoList[4]);   this.blockName = "S"; break;
-            case 6  : this.init(minoList[5]);   this.blockName = "Z"; break;
-            case 7  : this.init(minoList[6],2); this.blockName = "l"; break;
-            default : this.init(minoList[5]);   this.blockName = "Z"; break;
+            case 1  : this.init(minoJ[0]);   this.blockName = "J"; break;
+            case 2  : this.init(minoL[0]);   this.blockName = "L"; break;
+            case 3  : this.init(minoO[0]);   this.blockName = "O"; break;
+            case 4  : this.init(minoT[0]);   this.blockName = "T"; break;
+            case 5  : this.init(minoS[0]);   this.blockName = "S"; break;
+            case 6  : this.init(minoZ[0]);   this.blockName = "Z"; break;
+            case 7  : this.init(mino_l[0]); this.blockName = "l"; break;
+            default : this.init(minoS[0]);   this.blockName = "Z"; break;
         }
     },
     
@@ -224,7 +241,7 @@ function rePlay(){
 
 /* 위쪽 화살표 or 스페이스바 누름 - 블록 모양 바꾸기 */
 function transferBlock(){
-    
+
 }
 
 /* 아래쪽 화살표 누름 - 블록 빨리 내리기 */
@@ -247,13 +264,22 @@ function rightMove(){
     cood++;
 }
 
-
+var timer = { left:1,right:1 };
 document.onkeydown = function(e){
     if( e.keyCode === 37 ){//좌
+        if(!timer.left){
+            return false;
+        }
+        console.log(1111)
+        timer.left = 0;
+        setTimeout(function(){
+            timer.left = 1;
+        },400);
         leftMove();
     }else if( e.keyCode === 39 ){//우
         rightMove();
     }else if( e.keyCode === 38 ){//위
+
     }else if( e.keyCode === 40 ){//아래
         fastDown();
     }
